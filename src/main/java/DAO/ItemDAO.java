@@ -1,5 +1,6 @@
 package DAO;
 
+import exception.BadRequestException;
 import exception.InternalServerException;
 import model.Item;
 
@@ -12,9 +13,23 @@ public class ItemDAO extends DAO<Item> {
     }
 
     @Override
+    public Item save(Item object) throws InternalServerException {
+
+        object.setDateCreated(new Date());
+        object.setLastUpdatedDate(new Date());
+
+        return super.save(object);
+    }
+
+    @Override
     public Item update(Item object) throws InternalServerException {
 
-        object.setLastUpdatedDate(new Date());
+        try {
+            object.setDateCreated(findById(object.getId()).getDateCreated());
+            object.setLastUpdatedDate(new Date());
+        } catch (BadRequestException e) {
+            System.err.println("Something went wrong");
+        }
 
         return super.update(object);
     }
