@@ -1,30 +1,30 @@
 package DAO;
 
-import exception.BadRequestException;
 import exception.InternalServerException;
+import exception.NotFoundException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class DAO<T> {
+
     private final Class<T> tClass;
 
     public DAO(Class<T> tClass) {
         this.tClass = tClass;
     }
 
-    public T findById(long id) throws InternalServerException, BadRequestException {
+    public T findById(long id) throws InternalServerException, NotFoundException {
         try (Session session = HibernateUtil.createSessionFactory().openSession()) {
 
             T object = session.get(this.tClass, id);
 
             if (object == null) {
-                throw new BadRequestException("findById failed: missing object with id: " + id);
+                throw new NotFoundException("There is no object with id: " + id);
             }
-
             return object;
         } catch (HibernateException e) {
-            throw new InternalServerException("findById failed: something went wrong");
+            throw new InternalServerException("findById failed: " + e.getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ public class DAO<T> {
             transaction.commit();
             return object;
         } catch (HibernateException e) {
-            throw new InternalServerException("save failed: something went wrong");
+            throw new InternalServerException("save failed: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class DAO<T> {
             transaction.commit();
             return object;
         } catch (HibernateException e) {
-            throw new InternalServerException("update failed: something went wrong");
+            throw new InternalServerException("update failed: " + e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class DAO<T> {
 
             transaction.commit();
         } catch (HibernateException e) {
-            throw new InternalServerException("delete failed: something went wrong");
+            throw new InternalServerException("delete failed: " + e.getMessage());
         }
     }
 }

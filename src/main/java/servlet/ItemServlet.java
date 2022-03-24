@@ -2,6 +2,7 @@ package servlet;
 
 import exception.BadRequestException;
 import exception.InternalServerException;
+import exception.NotFoundException;
 import model.Item;
 import service.ItemService;
 
@@ -18,7 +19,6 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         try {
             long id = Long.parseLong(req.getParameter("id"));
             Item item = itemService.findById(id);
@@ -26,8 +26,7 @@ public class ItemServlet extends HttpServlet {
             resp.getWriter().println(item.toString());
             resp.getWriter().println("Get success");
 
-        } catch (BadRequestException | InternalServerException e) {
-
+        } catch (InternalServerException | NotFoundException e) {
             resp.getWriter().println("Get failed");
             System.err.println(e.getMessage());
         }
@@ -35,18 +34,15 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         try {
             Item item = new Item(
                     req.getParameter("name"),
-                    req.getParameter("description")
-            );
+                    req.getParameter("description"));
 
             itemService.save(item);
             resp.getWriter().println("Post success");
 
         } catch (BadRequestException | InternalServerException e) {
-
             resp.getWriter().println("Post failed");
             System.err.println(e.getMessage());
         }
@@ -54,12 +50,11 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         try {
             Item item = new Item(
                     req.getParameter("name"),
-                    req.getParameter("description")
-            );
+                    req.getParameter("description"));
+
             long id = Long.parseLong(req.getParameter("id"));
             item.setId(id);
 
@@ -67,7 +62,6 @@ public class ItemServlet extends HttpServlet {
             resp.getWriter().println("Put success");
 
         } catch (BadRequestException | InternalServerException e) {
-
             resp.getWriter().println("Put failed");
             System.err.println(e.getMessage());
         }

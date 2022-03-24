@@ -1,8 +1,8 @@
-CREATE TABLE ITEM
+CREATE TABLE item
 (
-    ID                NUMBER PRIMARY KEY,
-    NAME              NVARCHAR2(50)  NOT NULL,
-    DATE_CREATED      DATE DEFAULT CURRENT_DATE,
-    LAST_UPDATED_DATE DATE DEFAULT CURRENT_DATE,
-    DESCRIPTION       NVARCHAR2(300) NOT NULL
+    id                NUMBER PRIMARY KEY,
+    name              NVARCHAR2(50)  NOT NULL,
+    date_created      DATE DEFAULT CURRENT_DATE,
+    last_updated_date DATE DEFAULT CURRENT_DATE,
+    description       NVARCHAR2(300) NOT NULL
 );

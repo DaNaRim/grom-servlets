@@ -6,11 +6,12 @@ import java.util.Date;
 @Entity
 @Table(name = "ITEM")
 public class Item {
+
     private Long id;
     private String name;
+    private String description;
     private Date dateCreated;
     private Date lastUpdatedDate;
-    private String description;
 
     public Item() {
     }
@@ -21,52 +22,54 @@ public class Item {
     }
 
     @Id
-    @SequenceGenerator(name = "ItemSeq", sequenceName = "ITEM_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "ItemSeq", sequenceName = "item_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ItemSeq")
-    @Column(name = "ID")
+    @Column(name = "id")
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Column(name = "NAME")
+    @Column(name = "name")
     public String getName() {
         return name;
+    }
+
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    @Column(name = "date_created")
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    @Column(name = "last_updated_date")
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    @Column(name = "DATE_CREATED")
-    public Date getDateCreated() {
-        return dateCreated;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    @Column(name = "LAST_UPDATED_DATE")
-    public Date getLastUpdatedDate() {
-        return lastUpdatedDate;
-    }
-
     public void setLastUpdatedDate(Date lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    @Column(name = "DESCRIPTION")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public String toString() {

@@ -3,12 +3,14 @@ package service;
 import DAO.ItemDAO;
 import exception.BadRequestException;
 import exception.InternalServerException;
+import exception.NotFoundException;
 import model.Item;
 
 public class ItemService {
-    private static final ItemDAO itemDAO = new ItemDAO(Item.class);
 
-    public Item findById(long id) throws BadRequestException, InternalServerException {
+    private static final ItemDAO itemDAO = new ItemDAO();
+
+    public Item findById(long id) throws InternalServerException, NotFoundException {
         return itemDAO.findById(id);
     }
 
@@ -25,21 +27,27 @@ public class ItemService {
     }
 
     public void delete(long id) throws BadRequestException, InternalServerException {
-        Item item = itemDAO.findById(id);
-
+        Item item;
+        try {
+            item = itemDAO.findById(id);
+        } catch (NotFoundException e) {
+            throw new BadRequestException(e.getMessage());
+        }
         itemDAO.delete(item);
     }
 
     private void validateItem(Item item) throws BadRequestException {
         if (item == null) {
-            throw new BadRequestException("validateItem failed: impossible to process null item");
+            throw new BadRequestException("Impossible to process null item");
         }
-        if (item.getName() == null || item.getName().equals("") ||
-                item.getDescription() == null || item.getDescription().equals("")) {
-            throw new BadRequestException("validateItem failed: not all fields are filled");
+        if (item.getName() == null
+                || item.getDescription() == null
+                || item.getName().isBlank()
+                || item.getDescription().isBlank()) {
+            throw new BadRequestException("Not all fields are filled");
         }
         if (item.getName().length() > 50 || item.getDescription().length() > 300) {
-            throw new BadRequestException("validateItem failed: fields are too long");
+            throw new BadRequestException("Fields size is too long");
         }
     }
 }
